@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "479706633457",
+    "project_id": "skripsiotnap",
+    "storage_bucket": "skripsiotnap.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:479706633457:android:7bbbf9186fbdc1bc3b8550",
+        "android_client_info": {
+          "package_name": "com.example.lpg_monitor"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRb3B5xyZR4y04skAXQcl-6MDy0yLVhY8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:479706633457:android:841f51896c2abc063b8550",
+        "android_client_info": {
+          "package_name": "com.skripsi2026.lpgmonitor"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRb3B5xyZR4y04skAXQcl-6MDy0yLVhY8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
