@@ -2,21 +2,6 @@
 
 Sistem deteksi kebocoran gas LPG secara real-time menggunakan ESP32, sensor MQ-6 & BME688, klasifikasi Random Forest, dan aplikasi monitoring berbasis Flutter dengan penyimpanan data ke Firebase Firestore.
 
----
-
-## 📁 Struktur Repository
-
-```
-├── lpg_monitor/          # Aplikasi Flutter (Android)
-├── arduino/              # Kode ESP32 (Arduino IDE)
-│   └── SkenarioB_MQTT.ino
-└── training/             # Training model Random Forest (Python/Colab)
-    ├── dataset.csv
-    └── training.ipynb
-```
-
----
-
 ## 🧩 Komponen Sistem
 
 | Komponen | Keterangan |
