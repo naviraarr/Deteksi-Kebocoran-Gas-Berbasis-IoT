@@ -2,8 +2,8 @@
 
 Sistem deteksi kebocoran gas LPG real-time menggunakan ESP32, sensor MQ-6 & BME688, klasifikasi Random Forest, dan aplikasi Android berbasis Flutter.
 
-## Navira Arditha Aulia (2209106010)
-### Universitas Mulawarman 2026
+# Navira Arditha Aulia (2209106010)
+## Universitas Mulawarman 2026
 
 ---
 
