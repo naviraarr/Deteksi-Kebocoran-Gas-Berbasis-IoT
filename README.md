@@ -1,207 +1,77 @@
-# 🔥 Deteksi Kebocoran Gas LPG Berbasis IoT
+# Deteksi Kebocoran Gas LPG Berbasis IoT
 
-Sistem deteksi kebocoran gas LPG secara real-time menggunakan ESP32, sensor MQ-6 & BME688, klasifikasi Random Forest, dan aplikasi monitoring berbasis Flutter dengan penyimpanan data ke Firebase Firestore.
+Sistem deteksi kebocoran gas LPG real-time menggunakan ESP32, sensor MQ-6 & BME688, klasifikasi Random Forest, dan aplikasi Android berbasis Flutter.
 
-## 🧩 Komponen Sistem
+> Navira Arditha Aulia (2209106010)
 
-| Komponen | Keterangan |
+> Universitas Mulawarman 2026
+
+---
+
+## Komponen
+
+| Komponen | Fungsi |
 |---|---|
 | ESP32 | Mikrokontroler utama |
-| Sensor MQ-6 | Deteksi kadar gas LPG (ppm) |
-| Sensor BME688 | Suhu & kelembapan |
-| OLED SSD1306 | Tampilan lokal pada perangkat |
+| MQ-6 | Deteksi kadar gas LPG (ppm) |
+| BME688 | Suhu & kelembapan |
 | HiveMQ Cloud | MQTT broker (TLS/SSL) |
 | Flutter | Aplikasi monitoring Android |
-| Firebase Firestore | Penyimpanan riwayat pembacaan |
-| Random Forest | Model klasifikasi status gas |
+| Firebase Firestore | Penyimpanan riwayat data |
 
 ---
 
-## ⚙️ Cara Kerja
+## Cara Kerja
 
 ```
-Sensor MQ-6 + BME688
-        ↓
-      ESP32
-  (Random Forest)
-        ↓ MQTT (TLS)
-   HiveMQ Cloud
-        ↓
-  Flutter App ──→ Firebase Firestore
-  (Dashboard)       (Riwayat data)
+ESP32 (MQ-6 + BME688)
+  → Random Forest → MQTT → Flutter App → Firestore
 ```
 
-1. ESP32 membaca data suhu, kelembapan, dan kadar gas setiap 2 detik
-2. Model Random Forest pada ESP32 mengklasifikasikan status: **Normal**, **Waspada**, atau **Bocor**
+1. ESP32 membaca sensor setiap 2 detik
+2. Model Random Forest mengklasifikasikan: **Normal / Waspada / Bocor**
 3. Data dikirim via MQTT ke HiveMQ Cloud
-4. Aplikasi Flutter menerima data real-time dan menyimpannya ke Firestore
-5. Riwayat pembacaan dapat diakses kapan saja melalui tab Riwayat
+4. Aplikasi Flutter menampilkan data real-time dan menyimpan ke Firestore
 
 ---
 
-## 📱 Aplikasi Flutter
+## Setup ESP32
 
-### Fitur
-- Dashboard real-time (suhu, kelembapan, kadar gas LPG)
-- Indikator status: Normal / Waspada / Bocor
-- Riwayat pembacaan dengan infinite scroll dari Firestore
-- Statistik sesi (jumlah Normal, Waspada, Bocor)
-- Kontrol buzzer dari aplikasi
-
-### Prerequisites
-- Flutter SDK >= 3.0.0
-- Dart >= 3.0.0
-- Akun Firebase (Firestore aktif)
-
-### Setup
-
-1. Clone repository
-```bash
-git clone https://github.com/username/repo-name.git
-cd repo-name/lpg_monitor
-```
-
-2. Install dependencies
-```bash
-flutter pub get
-```
-
-3. Setup Firebase
-```bash
-dart pub global activate flutterfire_cli
-flutterfire configure
-```
-
-4. Jalankan aplikasi
-```bash
-flutter run
-```
-
-5. Build APK
-```bash
-flutter build apk --release
-```
-
-### Dependencies utama
-```yaml
-flutter_riverpod: state management
-mqtt_client: koneksi MQTT ke HiveMQ
-firebase_core: inisialisasi Firebase
-cloud_firestore: penyimpanan & stream data
-intl: format tanggal & waktu
-```
-
----
-
-## 🔌 Kode ESP32 (Arduino IDE)
-
-### Hardware
-| Pin ESP32 | Komponen |
-|---|---|
-| GPIO 35 | MQ-6 AOUT |
-| GPIO 14 | Buzzer |
-| GPIO 4, 5 | OLED SDA, SCL |
-| GPIO 18, 19 | BME688 SDA, SCL |
-
-### Library yang dibutuhkan
-- `MQTT` by Joel Gaehwiler
-- `ArduinoJson`
-- `Adafruit BME680`
-- `Adafruit SSD1306`
-- `WiFiClientSecure` (built-in ESP32)
-- `Eloquent ML` (untuk Random Forest inference)
-
-### Setup
-1. Buka `arduino/SkenarioB_MQTT.ino` di Arduino IDE
-2. Sesuaikan konfigurasi WiFi:
+1. Buka `arduino/DeteksiKebocoranGas.ino` di Arduino IDE
+2. Sesuaikan kredensial WiFi:
 ```cpp
 #define WIFI_SSID     "nama_wifi"
 #define WIFI_PASSWORD "password_wifi"
 ```
 3. Upload ke ESP32
 
-### Format payload MQTT
-```json
-{
-  "suhu": 28.5,
-  "humidity": 65.2,
-  "ppm": 120.3,
-  "adc": 1024,
-  "status": 0
-}
-```
-`status`: `0` = Normal, `1` = Waspada, `2` = Bocor
+**Pin:**
 
----
-
-## 🤖 Training Model (Python / Google Colab)
-
-### Prerequisites
-```
-pandas
-numpy
-scikit-learn
-micromlgen
-```
-
-### Cara menjalankan
-1. Buka `training/training.ipynb` di Google Colab atau Jupyter
-2. Upload `dataset.csv`
-3. Jalankan semua cell
-4. Output berupa file `random_forest_lpg.h` yang siap di-include ke kode Arduino
-
-### Fitur input model
-| Fitur | Keterangan |
+| GPIO | Komponen |
 |---|---|
-| suhu | Suhu ruangan (°C) |
-| humidity | Kelembapan relatif (%) |
-| ppm | Kadar gas LPG (ppm) |
-| adc | Nilai ADC raw sensor MQ-6 |
-
-### Label output
-| Label | Status |
-|---|---|
-| 0 | Normal |
-| 1 | Waspada |
-| 2 | Bocor |
+| 35 | MQ-6 AOUT |
+| 14 | Buzzer |
+| 4, 5 | OLED SDA/SCL |
+| 18, 19 | BME688 SDA/SCL |
 
 ---
 
-## 🔧 Konfigurasi MQTT
+## Setup Aplikasi Flutter
 
-| Parameter | Nilai |
-|---|---|
-| Broker | HiveMQ Cloud |
-| Port | 8883 (TLS) |
-| Topic data | `lpg/sensor/data` |
-| Topic buzzer | `lpg/control/buzzer` |
-| QoS | 1 |
-
----
-
-## 📊 Firebase Firestore
-
-Struktur koleksi `sensor_readings`:
-```
-{
-  timestamp: Timestamp,
-  suhu: number,
-  humidity: number,
-  ppm: number,
-  adc: number,
-  status: number (0/1/2)
-}
+```bash
+flutter pub get
+flutterfire configure
+flutter run
 ```
 
 ---
 
-## 👤 Author
+## Training Model
 
-**Navira Arditha Aulia** — 2209106010
-*Universitas Mulawarman — 2026*
+1. Buka `training/training.ipynb` di Google Colab
+2. Upload `dataset.csv` dan jalankan semua cell
+3. Output: `random_forest_lpg.h` → copy ke folder Arduino
 
 ---
 
-## 📄 Lisensi
-
-Repository ini dibuat untuk keperluan skripsi. Dilarang menggunakan untuk keperluan komersial tanpa izin.
+*Dilarang digunakan untuk keperluan komersial tanpa izin.*
